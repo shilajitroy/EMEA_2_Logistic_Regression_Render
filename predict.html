@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Predict · AdClick Insights{% endblock %}
+{% block content %}
+  <p class="eyebrow">Prediction</p>
+  <h1>Ad click predictor</h1>
+  <p class="muted">Provide the visitor details below. All fields are required.</p>
+
+  {% if error %}
+    <p class="notice error" role="alert">{{ error }}</p>
+  {% endif %}
+
+  <section class="card">
+    <form method="post" action="{{ url_for('predict') }}">
+      <div class="form-grid">
+        <div>
+          <label for="site_time">Daily Time Spent on Site</label>
+          <input id="site_time" name="site_time" type="number" min="0" step="any" value="{{ values.site_time }}" required>
+        </div>
+        <div>
+          <label for="age">Age</label>
+          <input id="age" name="age" type="number" min="18" max="100" step="1" value="{{ values.age }}" required>
+        </div>
+        <div>
+          <label for="income">Area Income</label>
+          <input id="income" name="income" type="number" min="0" step="any" value="{{ values.income }}" required>
+        </div>
+        <div>
+          <label for="internet_usage">Daily Internet Usage</label>
+          <input id="internet_usage" name="internet_usage" type="number" min="0" step="any" value="{{ values.internet_usage }}" required>
+        </div>
+        <div>
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender" required>
+            <option value="Female" {% if values.gender == "Female" %}selected{% endif %}>Female</option>
+            <option value="Male" {% if values.gender == "Male" %}selected{% endif %}>Male</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions"><button class="button" type="submit">Calculate prediction</button></div>
+    </form>
+  </section>
+
+  {% if result %}
+    <section class="card result {% if not result.clicked %}no-click{% endif %}" aria-live="polite">
+      <p class="eyebrow">Prediction result</p>
+      <h2>{{ result.message }}</h2>
+      <p class="probability">{{ result.probability }}</p>
+      <p class="muted">Estimated probability of clicking the ad.</p>
+    </section>
+  {% endif %}
+{% endblock %}
