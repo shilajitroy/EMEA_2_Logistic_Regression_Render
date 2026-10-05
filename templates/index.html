@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · AdClick Insights{% endblock %}
+{% block content %}
+  <p class="eyebrow">Overview</p>
+  <h1>Welcome, {{ username }}</h1>
+  <p class="muted">Use the saved model to estimate whether a visitor is likely to click an ad.</p>
+
+  <section class="grid" aria-label="Model overview">
+    <article class="card">
+      <div class="label">Model status</div>
+      <p class="metric">Ready</p>
+      <div class="label">Loaded from ad_click_model.joblib</div>
+    </article>
+    <article class="card">
+      <div class="label">Input features</div>
+      <p class="metric">5</p>
+      <div class="label">Time, age, income, usage, and gender</div>
+    </article>
+    <article class="card">
+      <div class="label">Prediction output</div>
+      <p class="metric">Click / No click</p>
+      <div class="label">Includes an estimated click probability</div>
+    </article>
+  </section>
+
+  {% if last_prediction %}
+    <section class="card result {% if not last_prediction.clicked %}no-click{% endif %}">
+      <p class="eyebrow">Latest prediction in this session</p>
+      <h2>{{ last_prediction.message }}</h2>
+      <p class="probability">{{ last_prediction.probability }}</p>
+      <p class="muted">Estimated probability of clicking the ad.</p>
+      <a class="button secondary" href="{{ url_for('predict') }}">Run another prediction</a>
+    </section>
+  {% else %}
+    <section class="card">
+      <h2>Start a prediction</h2>
+      <p class="muted">Enter a visitor's details and get a prediction from the trained model.</p>
+      <a class="button" href="{{ url_for('predict') }}">Open predictor</a>
+    </section>
+  {% endif %}
+{% endblock %}
