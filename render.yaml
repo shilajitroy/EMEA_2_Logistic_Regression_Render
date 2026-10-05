@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ad-click-predictor
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn flask_app:app
+    healthCheckPath: /login
+    envVars:
+      - key: FLASK_SECRET_KEY
+        generateValue: true
